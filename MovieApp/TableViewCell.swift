@@ -55,31 +55,7 @@ class TableViewCell: UITableViewCell, UICollectionViewDelegate, UICollectionView
         navigateToVC?.performSegue(withIdentifier: "identifier", sender: item)
     }
     
-    var isLoading = false
-    
-    func loadMoreData() {
-            if !self.isLoading {
-                self.isLoading = true
-                DispatchQueue.global().async {
-                    sleep(2)
-                    // Download more data here
-                    DispatchQueue.main.async {
-                        self.CollectionView.reloadData()
-                        self.isLoading = false
-                    }
-                }
-            }
-        }
 
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-            let offsetX = scrollView.contentOffset.x
-            let contentWidth = scrollView.contentSize.width
-        
-
-        if (offsetX > contentWidth - scrollView.frame.width * 4) && !isLoading {
-                loadMoreData()
-            }
-        }
 
 
 
