@@ -102,6 +102,7 @@ class MoviesTableViewController: UITableViewController {
 
     
     //detay sayfasi icin yazilacak
+    //segue Controller icinde olur (VC ekle)
  
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
