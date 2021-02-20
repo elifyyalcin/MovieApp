@@ -34,7 +34,8 @@ class MoviesTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let label = UILabel()
-        label.backgroundColor = .orange
+        label.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+        label.textColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
         label.text = headers[section]
         return label
     }
@@ -45,6 +46,7 @@ class MoviesTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! TableViewCell
+        cell.navigateToVC = self
         cell.configure(with: movies?[indexPath.section])
         return cell
     }
@@ -99,29 +101,17 @@ class MoviesTableViewController: UITableViewController {
         }
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
 
-    
-    //detay sayfasi icin yazilacak
-    //segue Controller icinde olur (VC ekle)
- 
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
-        print("Click : \(indexPath.row)")
-        let item = movies![indexPath.row]
-        print(item as Any)
-        performSegue(withIdentifier: "identifier", sender: item)
+        if ( segue.identifier == "identifier" ) {
+            let vc = segue.destination as!  DetailViewController
+            vc.item = sender as! Result
+        }
+
     }
     
 
-
-//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//
-//        if ( segue.identifier == "detail" ) {
-//            let vc = segue.destination as!  DetailViewController
-//            //vc.item = sender as! [Result]
-//        }
-//
-//    }
+    
 
     /*
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

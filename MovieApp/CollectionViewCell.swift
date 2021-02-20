@@ -18,7 +18,7 @@ class CollectionViewCell: UICollectionViewCell {
         self.movieTitle.text = movie.originalTitle
         
         if let ImgPath = movie.posterPath {
-            let OrgPath = "https://image.tmdb.org/t/p/original\(ImgPath)"
+            let OrgPath = "https://image.tmdb.org/t/p/w200\(ImgPath)"
             let url = URL(string: OrgPath)
             let data = try! Data(contentsOf: url!)
             self.MovieImage.image = UIImage(data: data)

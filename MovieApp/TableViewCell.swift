@@ -12,6 +12,8 @@ class TableViewCell: UITableViewCell, UICollectionViewDelegate, UICollectionView
 
     @IBOutlet weak var CollectionView: UICollectionView!
     
+    public var navigateToVC: UIViewController?
+    
     var movies: [Result]?
     
     override func awakeFromNib() {
@@ -43,6 +45,14 @@ class TableViewCell: UITableViewCell, UICollectionViewDelegate, UICollectionView
         let result = (movies?[indexPath.row])!
         cell.configure(with: result)
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        print("Click : \(indexPath.row)")
+        let item = movies![indexPath.row]
+        print(item as Any)
+        navigateToVC?.performSegue(withIdentifier: "identifier", sender: item)
     }
 
 
