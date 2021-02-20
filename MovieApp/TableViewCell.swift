@@ -61,7 +61,6 @@ class TableViewCell: UITableViewCell, UICollectionViewDelegate, UICollectionView
             if !self.isLoading {
                 self.isLoading = true
                 DispatchQueue.global().async {
-                    // Fake background loading task for 2 seconds
                     sleep(2)
                     // Download more data here
                     DispatchQueue.main.async {
