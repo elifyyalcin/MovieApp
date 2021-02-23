@@ -13,7 +13,6 @@ class DetailViewController: UIViewController {
     @IBOutlet weak var MovieInf: UITextView!
     @IBOutlet weak var MovieImg: UIImageView!
     @IBOutlet weak var MovieTitle: UILabel!
-        
     @IBOutlet weak var ReleaseDate: UILabel!
     @IBOutlet weak var VoteAvg: UILabel!
     
@@ -26,15 +25,13 @@ class DetailViewController: UIViewController {
         MovieImg.image = UIImage(data: data)
         MovieTitle.text = item?.originalTitle
         MovieInf.text = item?.overview
-        ReleaseDate.text = item?.releaseDate
+        //ReleaseDate.text = item?.releaseDate
         VoteAvg.text = String(item!.voteAverage)
         
-        
-        
-        
-        
-        
-        // Do any additional setup after loading the view.
+        // dd/mm/yyyy formatinda yazmak icin
+        let DateString : String = item!.releaseDate
+        let DateCharacters = Array(DateString)
+        ReleaseDate.text = "\(DateCharacters[8])" + "\(DateCharacters[9])"+"/"+"\(DateCharacters[5])"+"\(DateCharacters[6])" + "/" + "\(DateCharacters[0])" + "\(DateCharacters[1])" + "\(DateCharacters[2])" + "\(DateCharacters[3])"
     }
     
 

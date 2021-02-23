@@ -14,16 +14,23 @@ class MoviesTableViewController: UITableViewController {
     var Revenue: [Result]? = []
     var TopRated: [Result]? = []
 
-    var movies: [[Result]?]? //array icinde array olacak
+    var movies: [[Result]?]? //array icinde array olacak, ilk once section sonrasında section icerigi gonderilecek.
     
     let headers = ["Popular","Top Rated","Revenue"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        Popular_Connection()
-        TopRated_Connection()
-        Revenue_Connection()
+        Popular_Connection(with: 1){
+            self.tableView.reloadData()
+        }
+        TopRated_Connection(with: 1){
+            self.tableView.reloadData()
+        }
+        Revenue_Connection(with: 1){
+            self.tableView.reloadData()
+        }
+        
         
     }
     // MARK: - Table view data source
@@ -47,51 +54,52 @@ class MoviesTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! TableViewCell
         cell.navigateToVC = self
-        cell.configure(with: movies?[indexPath.section])
+        cell.configure(with: movies?[indexPath.section], section: indexPath.section) //section gonderildi
         return cell
     }
-     
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 225
-    }
 
-    func Popular_Connection(){
-        let params = [ "api_key" : "4f5eec4665e6f25a93c80fdc6ab53a30","sort_by": "popularity.desc"]
+
+    func Popular_Connection(with pageNumber: Int, onComplete: @escaping () -> ()){
+        let params = [ "api_key" : "4f5eec4665e6f25a93c80fdc6ab53a30","sort_by": "popularity.desc", "page":"\(pageNumber)"]
         let url = "https://api.themoviedb.org/3/discover/movie"
         AF.request(url, method: .get, parameters: params).responseJSON { (res) in
             
             if (res.response?.statusCode == 200) {
                 let movie_data = try? JSONDecoder().decode(MovieData.self, from: res.data!)
                 self.Popular = movie_data?.results
-                self.tableView.reloadData()
+                
+                onComplete()
             }
         }
     }
     
-    func TopRated_Connection(){
-        let params = [ "api_key" : "4f5eec4665e6f25a93c80fdc6ab53a30","sort_by": "vote_count.desc"]
+    func TopRated_Connection(with pageNumber: Int, onComplete: @escaping () -> ()){
+        let params = [ "api_key" : "4f5eec4665e6f25a93c80fdc6ab53a30","sort_by": "vote_count.desc", "page":"\(pageNumber)"]
         let url = "https://api.themoviedb.org/3/discover/movie"
         AF.request(url, method: .get, parameters: params).responseJSON { (res) in
             
             if (res.response?.statusCode == 200) {
                 let movie_data = try? JSONDecoder().decode(MovieData.self, from: res.data!)
                 self.TopRated = movie_data?.results
-                self.tableView.reloadData()
+
+                onComplete()
             }
         }
     }
     
     
-    func Revenue_Connection(){
-        let params = [ "api_key" : "4f5eec4665e6f25a93c80fdc6ab53a30","sort_by": "revenue.desc"]
+    func Revenue_Connection(with pageNumber: Int, onComplete: @escaping () -> ()){
+        let params = [ "api_key" : "4f5eec4665e6f25a93c80fdc6ab53a30","sort_by": "revenue.desc", "page":"\(pageNumber)"]
         let url = "https://api.themoviedb.org/3/discover/movie"
         AF.request(url, method: .get, parameters: params).responseJSON { (res) in
             
             if (res.response?.statusCode == 200) {
                 let movie_data = try? JSONDecoder().decode(MovieData.self, from: res.data!)
                 self.Revenue = movie_data?.results
+                
                 self.movies = [self.Popular, self.TopRated, self.Revenue]
-                self.tableView.reloadData()
+
+                onComplete()
             }
         }
     }
@@ -100,7 +108,7 @@ class MoviesTableViewController: UITableViewController {
 
         if ( segue.identifier == "identifier" ) {
             let vc = segue.destination as!  DetailViewController
-            vc.item = sender as! Result
+            vc.item = sender as? Result
         }
 
     }

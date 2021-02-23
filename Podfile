@@ -7,4 +7,5 @@ target 'MovieApp' do
 
   # Pods for MovieApp
   pod 'Alamofire'
+  pod 'lottie-ios'
 end
